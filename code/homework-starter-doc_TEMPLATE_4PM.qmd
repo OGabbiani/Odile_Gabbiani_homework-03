@@ -93,7 +93,12 @@ ggpairs(drought_exp_clean, # data frame
   theme(panel.grid = element_blank()) # getting rid of gridlines
 ```
 
-Choose 3 pairs of variables to compare. Make notes of those comparisons below.    
+Choose 3 pairs of variables to compare. Make notes of those comparisons below.
+
+**Leaf dry weight is strongly positively correlated with total mass (Pearson's r = 0.46)**
+**Shoot mass and total mass are strongly positively correlated (Pearson's r = 0.902)**
+**Root mass and total mass are strongly positively correlated (Pearson's r = 0.58)**
+
 
 **Total mass is positively correlated with leaf dry weight (Pearson's r = 0.46).**  
 
@@ -124,6 +129,7 @@ ggplot(data = drought_exp_clean, # data frame
   geom_jitter(width = 0.1, # narrow jitter
               height = 0) # not jittering points up and down
 ```
+**plants with higher biomass have bigger ranges (grindelia, gumweed, purple needle grass), plants with lower biomass have smaller ranges (deerweed, scarlet buggler, purple sage)**
 
 **plants with larger biomass seem to have larger ranges, Grindelia has highest biomass, Acmispon has lowest biomass**
 
@@ -136,7 +142,7 @@ ggplot(data = drought_exp_clean, # data frame
   geom_jitter(width = 0.1, # narrow jitter
               height = 0) # not jittering points up and down
 ```
-
+**well watered plants have larger biomass; total biomass greater when plants are well watered**
 **well watered plants tend to have larger biomass, makes sense based on how plants work!**
 
 ### how does specific leaf area (SLA) influence total biomass?
@@ -147,7 +153,7 @@ ggplot(data = drought_exp_clean, # data frame
            y = total_g)) + # y-axis
   geom_point() # scatterplot
 ```
-
+**There might be a slight positive correlation. Moderate (or strong depending on how you round) correlation/relationship** 
 **SLA doesn't really affect total mass? check correlation, compare evidence (visual and statistical)**
 
 # Model construction
