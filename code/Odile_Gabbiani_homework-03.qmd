@@ -15,7 +15,9 @@ execute: # for all code chunks
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
-## Running Code
+## Homework Setup
+
+### Loading in Libraries 
 
 ```{r}
 library(tidyverse) 
@@ -153,6 +155,9 @@ flextable::as_flextable(model.sel)
 
 
 ```{r}
+model_preds <- ggpredict(model4, 
+                         terms = c("water_treatment", 
+                                   "species_name"))
 plot(model_preds, # model predictions
      limit_range = TRUE, # limit the range of predictions to the range of predictor values
      show_data = TRUE) + # show the underlying data
@@ -162,6 +167,13 @@ plot(model_preds, # model predictions
   theme(panel.grid = element_blank()) # getting rid of gridlines
 ```
 
+# Problem 1 
+
+a. Table 1: Model Selection: This table lists the different types of models and the predictors associated with each one. It also lists the AIC and Delta AIC values for each model. 
+
+b. To address the central question of whether biomass is influenced by specific leaf area, plant species, and/or water treatment, different models were assigned to a combination of variables to determine which model contained the best predictor variables for total biomass. Model 0 included none of the variables, model 1 included all of them, and models 2 through 4 contained a combination of two out of the three variables. The model selection function was used to determine which model was most representative or best explained the data collected over the course of the experiment. Through model selection, model 4, which contained the species type and water treatment, was determined to be the most precise model (AIC =  -156.2, delta AIC = 0.00). Because the AIC value was the largest and the delta AIC was 0.00, model 4 was determined to best explain the data collected during the experiment. Diagnostics were taken to evaluate normality, homoscedasticity, and outliers. 
+
+c. 
 ```{r}
 model_preds_for_plotting <- model_preds %>% #assigning to new object 
   rename(water_treatment = x, #renaming 
@@ -196,10 +208,17 @@ geom_errorbar(data = model_preds_for_plotting, #adding errorbars
   scale_color_manual(values = c("Well watered" = "orchid3", #assigning color
                                 "Drought stressed" = "olivedrab4"))
 ```
+d. Figure 1: Total Biomass (g) as predicted by Water Treatment and Plant Species represents the response of different plant species to different water treatments (well watered and drough stressed). Bolded points represent model predictions by showing the relationship between different variables. Valliere, Justin; Zhang, Jacqueline; Sharifi, M.; Rundel, Philip (2019). Data from: Can we condition native plants to increase drought tolerance and improve restoration success? [Dataset]. Dryad. https://doi.org/10.5061/dryad.v0861f7
 
+```{r}
+summary(model4)
+```
 
-2. Affective Visualization 
-a. The data I took over the course of this class describes the number and species of birds seen perching on an artificial floating wetland island (FWI) on the UCSB Lagoon. An affectively visualization of my data could consist of birds sitting on pilings of different heights to represent how often each bird species was seen. Each piling would correspond to a different bird and that would be represented by having that specific species sitting atop it. While the pilings don't represent exactly where the birds were seen perching, they do give an idea of how many birds of each species were seen. 
+e. Plant species and water treatment best predicted total biomass (g). (Linear Model, F(7, 62) = 27.08, R^2^ = 0.7257, p < 0.0001, alpha = 0.005). With plant species held constant to the reference species Acmispon glaber (deerweed), on average well watered plants are larger than drought stressed plants by 0.117 ± 0.017 g. When the water treatment is held constant, on average plant species are 0.194 ± 0.03243 g larger than the reference species, deerweed. Grindelia comporum is the largest plant, with a total biomass of 0.313 ± 0.03243 g larger than the reference species, deerweed.     
+
+# Problem 2 
+
+## a. The data I took over the course of this class describes the number and species of birds seen perching on an artificial floating wetland island (FWI) on the UCSB Lagoon. An affectively visualization of my data could consist of birds sitting on pilings of different heights to represent how often each bird species was seen. Each piling would correspond to a different bird and that would be represented by having that specific species sitting atop it. While the pilings don't represent exactly where the birds were seen perching, they do give an idea of how many birds of each species were seen. 
 
 b. 
 
@@ -207,7 +226,8 @@ c.
 
 d. UCSB Lagoon Birds: this piece shows the number of bird species seen perching on an artificial floating wetland island (FWI) at the UCSB Lagoon over a period of five months, from January to May 2024. Each piling represents a different observed bird species and the piling's heights represent how many of those birds were seen. This piece is a Caran D'ache color pencil drawing that also incorporates Archival Ink pens to outline certain aspects of the visualization. To make this, I first made a sketch of what I wanted it to look like, which I transferred onto paper. I found images of the six bird species seen on the UCSB Lagoon and I drew them on top of the pilings. I did everything in pencil first, then added color, and finished by adding touches of ink.   
 
-3. Statistical Critique 
-a. To address their main research question (are CFWs effective in removing N and P from aquatic systems?), the authors used a variety of tests including Levene's Test, Kruskall Wallis Test, Spearman's R Correlation Coefficient, and Linear Regression. The authors did not include a visualization of their data in the article but they do have tables listing data points and showing the relationship between different variables. This is the table they included for the Spearman's R Correlation Coefficient.  
+# Problem 3
+
+a.To address their main research question (are CFWs effective in removing N and P from aquatic systems?), the authors used a variety of tests including Levene's Test, Kruskall Wallis Test, Spearman's R Correlation Coefficient, and Linear Regression. The authors did not include a visualization of their data in the article but they do have tables listing data points and showing the relationship between different variables. This is the table they included for the Spearman's R Correlation Coefficient.  
 
 b. To visualize their data, I would suggest the authors use
