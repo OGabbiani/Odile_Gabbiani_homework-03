@@ -2,7 +2,7 @@
 title: "Homework 3"
 author: "Odile Gabbiani"
 format:
-  html: 
+  docx: 
     toc: true # includes a table of contents in rendered html format
 execute: # for all code chunks
     warning: false # do not display warnings
@@ -17,10 +17,8 @@ Quarto enables you to weave together content and executable code into a finished
 
 ## Running Code
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-library(tidyverse)
+library(tidyverse) 
 library(readxl)
 library(here)
 library(janitor)
@@ -32,11 +30,10 @@ library(flextable)
 library(modelsummary)
 
 drought_exp <- read_xlsx(path = here("data", 
-                                     "Valliere_etal_EcoApps_Data.xlsx"),
-                         sheet = "First Harvest")
+                                     "Valliere_etal_EcoApps_Data.xlsx"), #reading in data from excel sheet 
+                         sheet = "First Harvest") #choosing which sheet to use
 
-# quick look at data 
-str(drought_exp)
+str(drought_exp) #taking a look at data
 class(drought_exp)
 ```
 
@@ -110,68 +107,50 @@ model0 <- lm(total_g ~ 1, # formula
 
 
 ```{r}
-model1 <- lm(total_g ~ sla + water_treatment + species_name,
-             data = drought_exp_clean)
+model1 <- lm(total_g ~ sla + water_treatment + species_name, #formula 
+             data = drought_exp_clean) #data frame 
 
-par(mfrow = c(2, 2))
+#diagnsotics for model 
+par(mfrow = c(2, 2)) 
 plot(model1)
-# you might get a warning when you run this code - that is ok!
 ```
 
 ```{r}
-model2 <- lm(total_g ~ sla + water_treatment,
-             data = drought_exp_clean)
-
+model2 <- lm(total_g ~ sla + water_treatment, #formula 
+             data = drought_exp_clean) #data frame
+#model diagnsotics 
+par(mfrow = c(2,2))
 plot(model2)
 ```
 
 ```{r}
-model3 <- lm(total_g ~ sla + species_name,
-             data = drought_exp_clean)
-
+model3 <- lm(total_g ~ sla + species_name, #formula 
+             data = drought_exp_clean) #data frame 
+#model diagnsotics 
+par(mfrow = c(2,2))
 plot(model3)
 ```
 
 
 ```{r}
-model4 <- lm(total_g ~ water_treatment + species_name, 
-             data = drought_exp_clean)
+model4 <- lm(total_g ~ water_treatment + species_name, #formula 
+             data = drought_exp_clean) #data frame
+#model diagnostics 
+par(mfrow = c(2,2))
 plot(model4)
 ```
 
 ```{r}
+#model selection for all four models 
 model.sel <- model.sel(model0,
           model1, 
           model2, 
           model3, 
           model4)
-
+#creating a flextable 
 flextable::as_flextable(model.sel)
 ```
 
-
-```{r}
-
-modelsummary::modelsummary( # this function takes a list of models
-  list( 
-    "null" = model0, # "model name" = model object
-    "model 1" = model1,
-    "model 2" = model2,
-    "model 3" = model3, 
-    "model 4" = model4), 
-  title = "Table 1: Model Comparison", 
-  gof_map = c("aic")
-) 
-
-
-```
-
-
-```{r}
-model_preds <- ggpredict(model4, 
-                         terms = c("water_treatment", 
-                                   "species_name"))
-```
 
 ```{r}
 plot(model_preds, # model predictions
@@ -184,42 +163,37 @@ plot(model_preds, # model predictions
 ```
 
 ```{r}
-model_preds_for_plotting <- model_preds %>% 
-  rename(water_treatment = x,
+model_preds_for_plotting <- model_preds %>% #assigning to new object 
+  rename(water_treatment = x, #renaming 
          species_name = group)
-
-# use View(model_preds_for_plotting) 
-# to compare this to the original model_preds data frame
 
 ggplot() +
   # underlying data
-  geom_point(data = drought_exp_clean,
-             alpha = 0.3,
-             aes(x = water_treatment,
-                 y = total_g,
-                 color = water_treatment)) +
-  # model prediction 95% CI ribbon
-geom_errorbar(data = model_preds_for_plotting,
-             aes(x = water_treatment, 
-                  y = predicted,
-                  ymin = conf.low,
-                  ymax = conf.high,
-                  fill = water_treatment),
+  geom_point(data = drought_exp_clean, #adding points 
+             alpha = 0.3, #tranparency 
+             aes(x = water_treatment, #assigning x axis 
+                 y = total_g, #assigning y axis 
+                 color = water_treatment)) + #assigning color 
+geom_errorbar(data = model_preds_for_plotting, #adding errorbars 
+             aes(x = water_treatment,  #assigning x 
+                  y = predicted, #assigning y 
+                  ymin = conf.low, #assigning y min 
+                  ymax = conf.high, #assigning y max 
+                  fill = water_treatment), #assigning fill 
               alpha = 0.2, width = 0.2) +
-  # model prediction lines
-  geom_point(data = model_preds_for_plotting,
-            aes(x = water_treatment, 
+  geom_point(data = model_preds_for_plotting, #adding points 
+            aes(x = water_treatment, #assigning aesthetics 
                 y = predicted,
                 color = water_treatment)) +
   # cleaner theme
   theme_classic() +
   # creating different panels for species
   facet_wrap(~species_name) + 
-  theme(legend.position = "none") + 
-  labs(x = "Water Treatment", 
+  theme(legend.position = "none") + #removing legend 
+  labs(x = "Water Treatment", #adding labels 
        y = "Total Biomass (g)", 
-       title = "Figure 1: Total Biomass (g) as predicted by Water Treatment and Plant Species") + 
-  scale_color_manual(values = c("Well watered" = "orchid3", 
+       title = "Figure 1: Total Biomass (g) as predicted by Water Treatment and Plant Species") + #adding title 
+  scale_color_manual(values = c("Well watered" = "orchid3", #assigning color
                                 "Drought stressed" = "olivedrab4"))
 ```
 
